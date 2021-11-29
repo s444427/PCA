@@ -1,6 +1,45 @@
+import numpy
 import numpy as np
 from sklearn.datasets import load_iris
 import matplotlib.pyplot as plt
+
+
+def cov2(X):
+    X = X.T
+    for i in range(len(X)):
+        mean = X[i].mean()
+        partial_vector = []
+        for j in range(len(X[0])):
+            partial_vector.append(X[i][j] - mean)
+        partial_vector = numpy.array([partial_vector])
+        partial_matrix = partial_vector.T @ partial_vector
+
+        if i == 0:
+            final_matrix = partial_matrix
+        else:
+            final_matrix = final_matrix + partial_matrix
+    return final_matrix
+
+
+def cov_check(Sigma, X):
+    cov = (X @ X.T) / len(X[0])
+    # This should be zero matrix
+    test_substract = np.subtract(cov.round(10), Sigma.round(10))
+
+    print(test_substract)
+
+    test_result = True
+    for i in test_substract:
+        for j in i:
+            if j != 0:
+                test_result = False
+
+    if test_result:
+        print("Covariance matrix: Check")
+        print("Covariance matrix: Check")
+    else:
+        print("Covariance matrix: Error while reverse checking covariance")
+        print("Covariance matrix: Error while reverse checking covariance")
 
 
 def eigenvectors_check(eigenvectors, eigenvalues, covMatrix):
@@ -37,6 +76,10 @@ def whitening_lambda(d_eigenvalues):
 def pca(X, d, whitening=False):
     # Calculate covariance matrix
     cov = (X @ X.T) / len(X[0])
+
+    # Check covariance similarity
+    # This will fail because of different assumptions during calculations
+    # cov_check(cov2(X), cov)
 
     # Calculate eigenvectors
     eigenvalues, eigenvectors = np.linalg.eigh(cov)
@@ -82,6 +125,7 @@ if __name__ == '__main__':
     # Data is grouped by values in columns
     # (so every sepal width is in first row and so on)
     iris_data = iris.data.T
+    cov2(iris_data)
 
     # Non-whitened data
     Y, V, Lambda = pca(iris_data, 2)
