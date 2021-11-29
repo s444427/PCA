@@ -12,7 +12,7 @@ HOW TO USE
 1. In main: change iris_data to any matrix where data is stacked in columns (samples are in rows)  
 2. In main: Set number of features d that you want to have in a final set (not more then columns!!!) in both pca calls
 
-result:
+result:  
 Y - processed data  
 V - list of eigenvectors of processed data (matrix)  
 Lambda - list of eigenvalues of processed data (vector)  
