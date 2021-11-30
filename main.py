@@ -4,13 +4,18 @@ from sklearn.datasets import load_iris
 import matplotlib.pyplot as plt
 
 
-def cov2(X):
+def cov2(X, div=False):
     X = X.T
-    for i in range(len(X)):
+    D = len(X[0])
+    n = len(X)
+    for i in range(n):
         mean = X[i].mean()
         partial_vector = []
-        for j in range(len(X[0])):
-            partial_vector.append(X[i][j] - mean)
+        for j in range(D):
+            var = X[i][j] - mean
+            if div:
+                var /= n
+            partial_vector.append(var)
         partial_vector = numpy.array([partial_vector])
         partial_matrix = partial_vector.T @ partial_vector
 
@@ -134,3 +139,6 @@ if __name__ == '__main__':
     Y1, V1, Lambda1 = pca(iris_data, 2, True)
 
     scatter_plot(Y, Y1)
+
+    print(V)
+    print(Lambda)
